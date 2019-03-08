@@ -9,6 +9,8 @@
 ## Images arraylist
 - It's a three dimmensional array of images
 - Dimension 0 is an array of different layers
+⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+...Test~``..
 ... Layer 0 is the background (ex. grass)
 ...Layer 1 is parts of the background that are on the background (ex. path on grass)
 ...Layer 2 is parts of the background that affect the player (ex. cliffs)
