@@ -1,5 +1,5 @@
 # Bread-Inc.
-This is a game about making bread and selling it for a profit.
+This is a game about making bread and selling it for a profit. It is a 2d isometric perspective game. 
 
 ## How to Play
 

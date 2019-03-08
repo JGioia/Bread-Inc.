@@ -12,6 +12,10 @@ public class Game extends JFrame implements KeyListener {
   public Image characterImg; // Image storing the character image
   private int characterX; // Integer storing the character's current x location
   private int characterY; // Integer storing the character's current y location
+
+  public Image backgroundImg;
+  private int backgroundX;
+  private int backgroundY;
   
   private int speed; // Integer storing the character's speed
   
@@ -46,11 +50,21 @@ public class Game extends JFrame implements KeyListener {
       // If there was an error opening the image, output the information about the error
       i.printStackTrace();
     }
+
+    try {
+      // Load the image called "character.png" which should be in the same folder as this code
+      backgroundImg = ImageIO.read( new File( "postapocalypse1.png" ) );
+    } catch( IOException i ) {
+      // If there was an error opening the image, output the information about the error
+      i.printStackTrace();
+    }
     
     // Initialize the default values for our data
     characterX = 100;
     characterY = 100;
     speed = 4;
+    backgroundX = 0;
+    backgroundY=0;
     
     // Initialize our default keys
     upKey = false;
@@ -88,8 +102,12 @@ public class Game extends JFrame implements KeyListener {
     Image frame = createImage(getWidth(),getHeight());
     // Instantiate a graphics object to store all our items drawn to our frame
     Graphics frameGraphics = frame.getGraphics();
+
+    frameGraphics.drawImage(backgroundImg, backgroundX, backgroundY,null);
+    
     // Draw the character object at the x and y coordinates defined, make it 100 pixels tall and 100 pixels wide
     frameGraphics.drawImage( characterImg, characterX, characterY, -100, 100, null );
+
     // Set the graphics we are about to draw to blue
     frameGraphics.setColor( Color.BLUE );
     // Draw some text at coordinates 10, 42 and put the String representing the character's x and y coordinates in

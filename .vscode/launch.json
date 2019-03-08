@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Game",
+      "request": "launch",
+      "mainClass": "Game",
+      "projectName": "Bread-Inc_cdf36296"
+    }
+  ]
+}
