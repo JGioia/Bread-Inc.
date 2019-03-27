@@ -8,6 +8,8 @@ import javax.imageio.*;             // Needed for image import
 
 // Declare a new class called Game which uses JFrame and KeyListener
 public class Game extends JFrame implements KeyListener {
+
+  public Character image;
   
   public Image characterImg; // Image storing the character image
   private int characterX; // Integer storing the character's current x location
@@ -28,7 +30,7 @@ public class Game extends JFrame implements KeyListener {
   public static void main( String[] args ) {
     Game game = new Game(); // Instantiate a game object which will store all our data
     while( true ) { // Endless game loop
-      try { Thread.sleep(1000/60); } catch (InterruptedException e) {} // Set framerate to 60 frames per second
+      try { Thread.sleep(1000/20); } catch (InterruptedException e) {} // Set framerate to 60 frames per second
       game.heartbeat(); // Execute the game's heartbeat
     }
   }
@@ -58,11 +60,13 @@ public class Game extends JFrame implements KeyListener {
       // If there was an error opening the image, output the information about the error
       i.printStackTrace();
     }
+    String[][] imgs ={{"character.png"}};
+    image = new Character(imgs,100,100,60,60,1,0,true,12);
     
     // Initialize the default values for our data
     characterX = 100;
     characterY = 100;
-    speed = 4;
+    speed = 12;
     backgroundX = 0;
     backgroundY=0;
     
@@ -78,19 +82,19 @@ public class Game extends JFrame implements KeyListener {
   public void heartbeat() {
     // Check if the up key is currently being pressed.
     if( upKey ) {
-      characterY -= speed; // Move the character up by speed number of pixels
+      image.yPos -= image.speed; // Move the character up by speed number of pixels
     }
     // Check if the down key is currently being pressed.
     if( downKey ) {
-      characterY += speed; // Move the character up by speed number of pixels
+      image.yPos += image.speed; // Move the character up by speed number of pixels
     }
     // Check if the right key is currently being pressed.
     if( rightKey ) {
-      characterX += speed; // Move the character up by speed number of pixels
+      image.xPos += image.speed; // Move the character up by speed number of pixels
     }
     // Check if the left key is currently being pressed.
     if( leftKey ) {
-      characterX -= speed; // Move the character up by speed number of pixels
+      image.xPos -= image.speed; // Move the character up by speed number of pixels
     }
     // Call the screen to redraw the content, calls paint below
     repaint();
@@ -106,15 +110,21 @@ public class Game extends JFrame implements KeyListener {
     frameGraphics.drawImage(backgroundImg, backgroundX, backgroundY,null);
     
     // Draw the character object at the x and y coordinates defined, make it 100 pixels tall and 100 pixels wide
-    frameGraphics.drawImage( characterImg, characterX, characterY, -100, 100, null );
-
-    // Set the graphics we are about to draw to blue
-    frameGraphics.setColor( Color.BLUE );
-    // Draw some text at coordinates 10, 42 and put the String representing the character's x and y coordinates in
-    frameGraphics.drawString( characterX + ", " + characterY, 10, 42 );
-    frameGraphics.drawString( upKey + ", " + downKey + ", " + leftKey + ", " + rightKey, 10, 82 );
-    // Now swap the currently display screen with the one we just created and draw it at coordinates 0, 0 so it takes up the whole screen
-    page.drawImage(frame,0,0,null);
+    //frameGraphics.drawImage( characterImg, characterX, characterY, -100, 100, null );
+    if(image.visibility){
+      frameGraphics.drawImage(image.img, image.xPos, image.yPos, image.xSize, image.ySize, null);
+    }
+    
+    /*
+      //Debug Graphics
+      // Set the graphics we are about to draw to blue
+      frameGraphics.setColor( Color.BLUE );
+      // Draw some text at coordinates 10, 42 and put the String representing the character's x and y coordinates in
+      frameGraphics.drawString( characterX + ", " + characterY, 10, 42 );
+      frameGraphics.drawString( upKey + ", " + downKey + ", " + leftKey + ", " + rightKey, 10, 82 );
+      // Now swap the currently display screen with the one we just created and draw it at coordinates 0, 0 so it takes up the whole screen
+      page.drawImage(frame,0,0,null);
+    */
   }
   
   // We implement a KeyListener so we need three KeyListener methods

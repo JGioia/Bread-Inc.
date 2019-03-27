@@ -2,10 +2,9 @@
 ## Game.java
 - This class runs the game
 - Ways to be moved
-## Class 2
-- This class extends Class 1
-- Allows balls to be part of ball groups
 # Class 1
+
+
 ## Images arraylist
 - It's a three dimmensional array of images
 - Dimension 0 is an array of different layers
