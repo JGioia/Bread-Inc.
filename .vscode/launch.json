@@ -2,6 +2,21 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - pokerGame",
+      "request": "launch",
+      "mainClass": "pokerGame",
+      "console": "integratedTerminal",
+      "projectName": "Bread-Inc_cdf36296"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Runner",
+      "request": "launch",
+      "mainClass": "Runner",
+      "projectName": "Bread-Inc_cdf36296"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Game",
       "request": "launch",
       "mainClass": "Game",

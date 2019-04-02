@@ -21,7 +21,7 @@ Gameplay:
 - The twist. is a suprise.
 
 ## Version
-0.0.1 - Class structure and game idea completely changed. Readme.md finished.  
+0.0.1 - Class structure and game idea completely changed. README.md finished.  
 0.0.0 - Initial Commit
 
 ## Author

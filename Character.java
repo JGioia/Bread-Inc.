@@ -20,4 +20,9 @@ public class Character extends Sprite{
             }
         this.speed=speed;
     }
+    /*
+    public Image getImage(){
+        return imgs[cycleNum][spriteNum];
+    }
+    */
 }

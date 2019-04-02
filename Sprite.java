@@ -26,4 +26,19 @@ public class Sprite{
         this.id=id;
         this.visibility=visibility;
     }
+    public Image getImage(){
+        return img;
+    }
+    public int getXPos(){
+        return xPos;
+    }
+    public int getYPos(){
+        return yPos;
+    }
+    public int getXSize(){
+        return xSize;
+    }
+    public int getYSize(){
+        return ySize;
+    }
 }
