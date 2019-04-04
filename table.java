@@ -75,7 +75,22 @@ public class table extends simpleCardGroup{
         return players[playerNum].hasFeld();
     }
 
+    public void returnCardsToDeck(){
+        returnCards();
+        for(int i=0;i<players.length;i++)
+            players[i].returnCards();
+    }
     
+    public void makeHandsVisible(){
+        for(int i=0;i<players.length;i++){
+            players[i].setHandVisibility(true);
+        }
+    }
+    public void makeHandsInvisible(){
+        for(int i=0;i<players.length;i++){
+            players[i].setHandVisibility(false);
+        }
+    }
 
     public void incrTurn(){
         turnNum++;
@@ -87,17 +102,26 @@ public class table extends simpleCardGroup{
         this.turnNum=turnNum;
     }
 
+    public void incrRound(){
+        roundNum++;
+    }
+    public int getRound(){
+        return roundNum;
+    }
+    public void setRound(int roundNum){
+        this.roundNum=roundNum;
+    }
+
     public String toString(){
-        String result="Round: "+turnNum;
+        String result="Round: "+roundNum+"\nTurn: "+turnNum;
         for(int i=0;i<players.length;i++){
             result+="\n\n"+players[i]+"\n";
         }
         result+="\nPot: "+pot+"\nTable: "+super.toString()+"\n";
         return result;
     }
-
     public String toStringPlayerView(int playerNum){
-        String result="Player's "+players[playerNum].getName()+"'s turn: \nRound: "+turnNum;
+        String result="Player's "+players[playerNum].getName()+"'s turn: \nRound: "+roundNum+"\nTurn: "+turnNum;
         for(int i=0;i<players.length;i++){
             if(i!=playerNum)
                 result+="\n\n"+players[i];
@@ -106,11 +130,11 @@ public class table extends simpleCardGroup{
         result+="\n\nYour Hand: "+players[playerNum].toStringHandVisible()+"\n";
         return result;
     }
-
     public String toStringPlayerWon(int playerNum){
         makeHandsVisible();
         givePotToPlayer(playerNum);
-        //return cards
-        String result=toString()+"\n\nWinner:"+players[playerNum].getName();
+        String result=toString()+"\n\nWinner: "+players[playerNum].getName()+"\n";
+        returnCardsToDeck();
+        return result;
     }
 }

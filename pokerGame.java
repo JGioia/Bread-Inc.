@@ -11,6 +11,7 @@ public class pokerGame{
         turn();
 
     }
+    
     private static void initialization(){
         Scanner scan = new Scanner(System.in);
         deck d1 = new deck();
@@ -52,8 +53,11 @@ public class pokerGame{
     }
 
     public static void round(){
+        t1.incrRound();
+        t1.setTurn(0);
         wonRound=false;
         t1.givePlayersXCards(2);
+        t1.makeHandsInvisible();
         turn();
         if(!wonRound){
             t1.takeCards(3);
@@ -67,8 +71,9 @@ public class pokerGame{
             t1.takeCard();
             turn();
         }
+        simpleConsole.clearScreen();
         int winner = pokerHands.getWinner(t1);
-        System.out.println(t1.toStringPlayerView(winner));
+        System.out.println(t1.toStringPlayerWon(winner));
         simpleConsole.enterContinue();
     }
 }

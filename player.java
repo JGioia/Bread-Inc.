@@ -46,6 +46,9 @@ public class player extends simpleCardGroup{
     public void changeHandVisibility(){
         visibleHand=!visibleHand;
     }
+    public void setHandVisibility(boolean visibleHand){
+        this.visibleHand=visibleHand;
+    }
     public boolean getHandVisibility(){
         return visibleHand;
     }

@@ -6,6 +6,7 @@ public class deck{
         cards=initializeDeck();
         shuffle();
     }
+
     public card [] initializeDeck(){
         card [] result = new card[52];
         for(int i=0;i<suitList.length;i++)
@@ -13,21 +14,16 @@ public class deck{
                 result[i*13+j]=new card(suitList[i],faceList[j]);
         return result;
     }
+    
     public void shuffle(){
-        card [] temp = new card[cards.length];
-        for(int i=0;i<cards.length;i++)
-            temp[i]=cards[i];
-        int [] sequence = new int[cards.length];
-        for(int i=0;i<sequence.length;i++){
-            int futureValue=(int)(Math.random()*(sequence.length-i));
-            for(int j=0;j<i;j++)
-                if(futureValue>=sequence[i])
-                    futureValue++;
-            sequence[i]=futureValue;
+        for(int i=0;i<cards.length;i++){
+            int newPos = (int)(Math.random()*cards.length);
+            card temp = cards[i];
+            cards[i]=cards[newPos];
+            cards[newPos]=temp;
         }
-        for(int i=0;i<sequence.length;i++)
-            cards[i]=temp[sequence[i]];
     }
+    
     public card takeTopCard(){
         card result = new card("Hearts","Two");
         if(cards.length>0){
@@ -39,5 +35,27 @@ public class deck{
             cards=temp;
         }
         return result;
+    }
+
+    public void addCard(card newCard){
+        card[] temp = new card[cards.length+1];
+        for(int i=0;i<cards.length;i++)
+            temp[i]=cards[i];
+        temp[cards.length]=newCard;
+        cards=temp;
+    }
+    public void addCards(card[] newCards){
+        for(int i=0;i<newCards.length;i++)
+            addCard(newCards[i]);
+    }
+
+    public void printDeck(){
+        for(int i=0;i<cards.length;i++){
+            System.out.print(cards[i]+"\t");
+        }
+    }
+
+    public int getDeckSize(){
+        return cards.length;
     }
 }
