@@ -1,6 +1,6 @@
 public class table extends simpleCardGroup{
     private player [] players;
-    private int pot,turnNum=0;
+    private int pot,turnNum=0, roundNum=0;;
 
     public table(deck d1, String[] names, int money){
         super (d1);
@@ -71,6 +71,12 @@ public class table extends simpleCardGroup{
         }
     }
 
+    public boolean playerHasFeld(int playerNum){
+        return players[playerNum].hasFeld();
+    }
+
+    
+
     public void incrTurn(){
         turnNum++;
     }
@@ -82,7 +88,7 @@ public class table extends simpleCardGroup{
     }
 
     public String toString(){
-        String result="Turn: "+turnNum;
+        String result="Round: "+turnNum;
         for(int i=0;i<players.length;i++){
             result+="\n\n"+players[i]+"\n";
         }
@@ -91,7 +97,7 @@ public class table extends simpleCardGroup{
     }
 
     public String toStringPlayerView(int playerNum){
-        String result="Player's turn: "+players[playerNum]+"\nTurn: "+turnNum;
+        String result="Player's "+players[playerNum].getName()+"'s turn: \nRound: "+turnNum;
         for(int i=0;i<players.length;i++){
             if(i!=playerNum)
                 result+="\n\n"+players[i];
@@ -99,5 +105,12 @@ public class table extends simpleCardGroup{
         result+="\n\nPot: "+pot+"\nTable: "+super.toString();
         result+="\n\nYour Hand: "+players[playerNum].toStringHandVisible()+"\n";
         return result;
+    }
+
+    public String toStringPlayerWon(int playerNum){
+        makeHandsVisible();
+        givePotToPlayer(playerNum);
+        //return cards
+        String result=toString()+"\n\nWinner:"+players[playerNum].getName();
     }
 }

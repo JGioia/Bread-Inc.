@@ -7,6 +7,10 @@ public class simpleCardGroup{
     public void takeCard(){
         addCard(d1.takeTopCard());
     }
+    public void takeCards(int numCards){
+        for(int i=0;i<numCards;i++)
+            takeCard();
+    }
     public void addCard(card tempCard){
         card [] tempCards = new card [cards.length+1];
         for(int i=0;i<cards.length;i++){
