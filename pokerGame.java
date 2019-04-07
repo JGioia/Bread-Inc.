@@ -3,6 +3,7 @@ public class pokerGame{
     static table t1;
     static boolean won=false;
     static boolean wonRound;
+
     public static void main(String [] args){
         initialization();
         while(!won){
@@ -32,7 +33,7 @@ public class pokerGame{
         simpleConsole.clearScreen();
         System.out.println(t1);
         simpleConsole.enterContinue();
-        for(int i=0;i<t1.getPlayers().length;i++){
+        for(int i=0;i<t1.getPlayers().length||!t1.readyToContinue();i++){
             int playersAlive=0;
             for(int j=0;j<t1.getPlayers().length;j++){
                 if(!t1.playerHasFeld(j))
@@ -46,7 +47,24 @@ public class pokerGame{
             if(!t1.playerHasFeld(i)){
                 simpleConsole.clearScreen();
                 System.out.println(t1.toStringPlayerView(i));
-                simpleConsole.enterContinue();//get what player wants to do
+                String[] options = new String[3];
+                options[0]="Fold";
+                options[2]="Raise";
+                if(t1.getPlayerBet(i)==t1.getHighestBet()){
+                    options[1]="Check";
+                }else{
+                    options[1]="Call";
+                }
+                //side pots?
+                String command = simpleConsole.getInputFromOptions(options);
+                if(command.toUpperCase().equals("FOLD")){
+                    t1.foldPlayer(i);
+                }else if(command.toUpperCase().equals("RAISE")){
+                    String message="How much do you want to bet:";
+                    t1.raisePlayer(simpleConsole.getIntInput(t1.getPlayerMoney(i), 0, message));
+                }else if(command.toUpperCase().equals("CALL")){
+                    t1.callPlayer(i);
+                }
                 t1.refreshPot();
             }
         }

@@ -38,9 +38,30 @@ public class simpleConsole{
         }
         return result;
     }
+    
     public static void enterContinue(){
         Scanner scan = new Scanner(System.in);
         System.out.println("Press enter to continue...");
         scan.nextLine();
+    }
+
+    public static String getInputFromOptions(String[] options){
+        Scanner scan = new Scanner(System.in);
+        String input="";
+        boolean badInput=true;
+        while(badInput){
+            System.out.print("You can ");
+            for(int i=0;i<options.length;i++){
+                System.out.print(options[i]);
+                if(i<options.length-1)
+                    System.out.print(", ");
+            }
+            System.out.println();
+            input=scan.nextLine();
+            for(int i=0;i<options.length;i++)
+                if(input.toUpperCase().equals(options[i].toUpperCase()))
+                    badInput=false;
+        }
+        return input;
     }
 }

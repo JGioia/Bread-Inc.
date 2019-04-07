@@ -75,6 +75,44 @@ public class table extends simpleCardGroup{
         return players[playerNum].hasFeld();
     }
 
+    public void betPlayer(int playerNum, int betAmount){
+        players[playerNum].raiseBet(betAmount);
+    }
+    public void callPlayer(int playerNum){
+
+    }//make
+    public void raisePlayer(int playerNum){
+
+    }
+    public int getPlayerBet(int playerNum){
+        return players[playerNum].getBet();
+    }
+    public int getHighestBet(){
+        int highBet=0;
+        for(int i=0;i<players.length;i++){
+            if(players[i].getBet()>highBet){
+                highBet=players[i].getBet();
+            }
+        }
+        return highBet;
+    }
+
+    public int getPlayerMoney(int playerNum){
+        return players[playerNum].getMoney();
+    }
+
+    public void foldPlayer(int playerNum){
+        players[playerNum].fold();
+    }
+
+    public boolean readyToContinue(){
+        boolean result=true;
+        for(int i=0;i<players.length;i++)
+            if(!players[i].hasFeld()&&players[i].getBet()==getHighestBet())
+                result=false;
+        return result;
+    }
+
     public void returnCardsToDeck(){
         returnCards();
         for(int i=0;i<players.length;i++)
