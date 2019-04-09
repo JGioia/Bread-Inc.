@@ -75,15 +75,34 @@ public class table extends simpleCardGroup{
         return players[playerNum].hasFeld();
     }
 
+    public boolean playerCanBet(int playerNum, int betAmount){
+        if(players[playerNum].getMoney()>=betAmount)
+            return true;
+        return false;
+    }
     public void betPlayer(int playerNum, int betAmount){
         players[playerNum].raiseBet(betAmount);
     }
-    public void callPlayer(int playerNum){
-
-    }//make
-    public void raisePlayer(int playerNum){
-
+    public boolean playerCanCall(int playerNum){
+        if(playerCanBet(playerNum, getHighestBet()-players[playerNum].getBet()))
+            return true;
+        return false;
     }
+    public void callPlayer(int playerNum){
+        betPlayer(playerNum, getHighestBet()-players[playerNum].getBet());
+    }//make
+    public boolean playerCanRaise(int playerNum){
+        if(playerCanBet(playerNum, getHighestBet()-players[playerNum].getBet()+1))
+            return true;
+        return false;
+    }
+    public int playerMaxRaise(int playerNum){
+        return players[playerNum].getMoney()-getHighestBet()+players[playerNum].getBet();
+    }
+    public void raisePlayer(int playerNum, int raiseAmount){
+        betPlayer(playerNum, getHighestBet()-players[playerNum].getBet()+raiseAmount);
+    }
+
     public int getPlayerBet(int playerNum){
         return players[playerNum].getBet();
     }
@@ -104,12 +123,18 @@ public class table extends simpleCardGroup{
     public void foldPlayer(int playerNum){
         players[playerNum].fold();
     }
+    public void unfoldPlayers(){
+        for(int i=0;i<players.length;i++){
+            players[i].unfold();
+        }
+    }
 
     public boolean readyToContinue(){
         boolean result=true;
         for(int i=0;i<players.length;i++)
-            if(!players[i].hasFeld()&&players[i].getBet()==getHighestBet())
+            if(!(players[i].hasFeld()||players[i].getBet()==getHighestBet())){
                 result=false;
+            }
         return result;
     }
 
@@ -173,6 +198,7 @@ public class table extends simpleCardGroup{
         givePotToPlayer(playerNum);
         String result=toString()+"\n\nWinner: "+players[playerNum].getName()+"\n";
         returnCardsToDeck();
+        unfoldPlayers();
         return result;
     }
 }

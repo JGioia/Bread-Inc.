@@ -33,7 +33,10 @@ public class pokerGame{
         simpleConsole.clearScreen();
         System.out.println(t1);
         simpleConsole.enterContinue();
-        for(int i=0;i<t1.getPlayers().length||!t1.readyToContinue();i++){
+        int i=0;
+        while(i<t1.getPlayers().length||!t1.readyToContinue()){
+            if(i>=t1.getPlayers().length)
+                i=0;
             int playersAlive=0;
             for(int j=0;j<t1.getPlayers().length;j++){
                 if(!t1.playerHasFeld(j))
@@ -49,11 +52,25 @@ public class pokerGame{
                 System.out.println(t1.toStringPlayerView(i));
                 String[] options = new String[3];
                 options[0]="Fold";
-                options[2]="Raise";
+                if(t1.playerCanRaise(i))
+                    options[2]="Raise";
                 if(t1.getPlayerBet(i)==t1.getHighestBet()){
                     options[1]="Check";
                 }else{
-                    options[1]="Call";
+                    if(t1.playerCanCall(i))
+                        options[1]="Call";
+                }
+                for(int j=0;j<options.length;j++){
+                    if(options[j]==null){
+                        String[] temp=new String[options.length-1];
+                        for(int k=0;k<temp.length;k++){
+                            if(i<j)
+                                temp[k]=options[k];
+                            else
+                                temp[k]=options[k+1];
+                        }
+                        options=temp;
+                    }
                 }
                 //side pots?
                 String command = simpleConsole.getInputFromOptions(options);
@@ -61,12 +78,13 @@ public class pokerGame{
                     t1.foldPlayer(i);
                 }else if(command.toUpperCase().equals("RAISE")){
                     String message="How much do you want to bet:";
-                    t1.raisePlayer(simpleConsole.getIntInput(t1.getPlayerMoney(i), 0, message));
+                    t1.raisePlayer(i,simpleConsole.getIntInput(t1.playerMaxRaise(i), 0, message));
                 }else if(command.toUpperCase().equals("CALL")){
                     t1.callPlayer(i);
                 }
                 t1.refreshPot();
             }
+            i++;
         }
     }
 
