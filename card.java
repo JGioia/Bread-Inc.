@@ -12,6 +12,10 @@ public class card{
         setFaceShorthand();
         setSuitShorthand();
     }
+    public card(int faceValue){
+        suit="Spades";
+        this.faceValue=faceValue;
+    }
 
     private int faceToValue(String face){
         int value=0;

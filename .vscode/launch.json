@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - pokerHands",
+      "request": "launch",
+      "mainClass": "pokerHands",
+      "projectName": "Bread-Inc_cdf36296"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - pokerGame",
       "request": "launch",
       "mainClass": "pokerGame",

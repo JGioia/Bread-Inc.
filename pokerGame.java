@@ -34,7 +34,7 @@ public class pokerGame{
         System.out.println(t1);
         simpleConsole.enterContinue();
         int i=0;
-        while(i<t1.getPlayers().length||!t1.readyToContinue()){
+        while(i<t1.getPlayers().length||!t1.readyToContinue()){//doesn't end at the right time
             if(i>=t1.getPlayers().length)
                 i=0;
             int playersAlive=0;

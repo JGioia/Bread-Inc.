@@ -58,6 +58,12 @@ public class table extends simpleCardGroup{
     public player [] getPlayers(){
         return players;
     }
+    public player getPlayer(int playerNum){
+        return players[playerNum];
+    }
+    public int getNumPlayers(){
+        return players.length;
+    }
 
     public void givePlayersXCards(int x){
         for(int i=0;i<players.length;i++){
