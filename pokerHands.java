@@ -38,6 +38,12 @@ public class pokerHands{
         card[] playerCards = p.getCards();
         card[] tableCards = t.getCards();
         cards = new card[playerCards.length+tableCards.length];
+        for(int i=0;i<playerCards.length;i++){
+            cards[i]=playerCards[i];
+        }
+        for(int i=playerCards.length;i<cards.length;i++){
+            cards[i]=tableCards[i-playerCards.length];
+        }
         int[][] combinationOrder=new int[0][0];
         if(cards.length==7)
             combinationOrder=nCr75();
