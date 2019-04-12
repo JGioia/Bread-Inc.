@@ -4,10 +4,11 @@ public class table extends simpleCardGroup{
 
     public table(deck d1, String[] names, int money){
         super (d1);
-        players=new player[names.length];
+        players=new player[names.length+1];
         for(int i=0;i<names.length;i++){
             players[i]= new player(d1, money, names[i]);
         }
+        players[names.length]=new player(d1, money, "Bot", false);
         refreshPot();
     }
 
@@ -120,6 +121,10 @@ public class table extends simpleCardGroup{
             }
         }
         return highBet;
+    }
+
+    public boolean playerIsHuman(int playerNum){
+        return players[playerNum].isHuman();
     }
 
     public int getPlayerMoney(int playerNum){

@@ -1,6 +1,6 @@
 public class player extends simpleCardGroup{
     private int money, bet;
-    private boolean visibleHand, feld;
+    private boolean visibleHand, feld, isHuman;
     private String name;
     public player(deck d1, int money, String name){
         super(d1);
@@ -9,6 +9,16 @@ public class player extends simpleCardGroup{
         visibleHand=false;
         this.name=name;
         feld=false;
+        isHuman=true;
+    }
+    public player(deck d1, int money, String name, boolean isHuman){
+        super(d1);
+        this.money=money;
+        bet=0;
+        visibleHand=false;
+        this.name=name;
+        feld=false;
+        this.isHuman=isHuman;
     }
 
     public boolean betValidity(int bet){
@@ -68,6 +78,10 @@ public class player extends simpleCardGroup{
     }
     public void setName(String name){
         this.name=name;
+    }
+
+    public boolean isHuman(){
+        return isHuman;
     }
 
     public String toString(){

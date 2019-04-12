@@ -73,7 +73,12 @@ public class pokerGame{
                     }
                 }
                 //side pots?
-                String command = simpleConsole.getInputFromOptions(options);
+                String command;
+                if(t1.playerIsHuman(i)){
+                    command = simpleConsole.getInputFromOptions(options);
+                }else{
+                    command = pokerAI.getInput(options);
+                }
                 if(command.toUpperCase().equals("FOLD")){
                     t1.foldPlayer(i);
                 }else if(command.toUpperCase().equals("RAISE")){

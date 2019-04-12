@@ -45,9 +45,12 @@ public class pokerHands{
             cards[i]=tableCards[i-playerCards.length];
         }
         int[][] combinationOrder=new int[0][0];
-        if(cards.length==7)
+        if(cards.length==7){
             combinationOrder=nCr75();
-        combinations=new card[combinationOrder.length][combinationOrder[0].length];
+            combinations=new card[combinationOrder.length][combinationOrder[0].length];
+        }else{
+            combinations= new card[0][0];
+        }
         for(int i=0;i<combinations.length;i++)
             for(int j=0;j<combinations[i].length;j++)
                 combinations[i][j]=cards[combinationOrder[i][j]-1];
