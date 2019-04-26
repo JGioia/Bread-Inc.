@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - GraphicalInterface",
+      "request": "launch",
+      "mainClass": "GraphicalInterface",
+      "projectName": "Bread-Inc_cdf36296"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - pokerHands",
       "request": "launch",
       "mainClass": "pokerHands",
