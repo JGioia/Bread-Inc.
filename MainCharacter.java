@@ -33,14 +33,14 @@ public class MainCharacter extends Character{
         return false;
     }
 
-    public void tick(boolean[] input){
-        if(input[0])
+    public void tick(boolean[] boolInput, int[] intInput){
+        if(boolInput[0])
             moveUp();
-        if(input[1])
+        if(boolInput[1])
             moveDown();
-        if(input[2])
+        if(boolInput[2])
             moveRight();
-        if(input[3])
+        if(boolInput[3])
             moveLeft();
     }
 }

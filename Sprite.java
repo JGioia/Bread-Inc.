@@ -95,16 +95,37 @@ public class Sprite{
         hitbox[1][1]+=yAdd;
     }
 
+    public boolean wouldHitBox(int [][]hitbox){
+        if((!(hitbox[0][0]>this.hitbox[0][1]||hitbox[0][1]<this.hitbox[0][0])
+        &&!(hitbox[1][0]>this.hitbox[1][1]||hitbox[1][1]<this.hitbox[1][0])))
+            return true;
+        return false;
+    }
+    public boolean wouldHitBox(int[] point){
+        int[][]hitbox=new int[2][2];
+        hitbox[0][0]=point[0];
+        hitbox[0][1]=point[0];
+        hitbox[1][0]=point[1];
+        hitbox[1][1]=point[1];
+        return wouldHitBox(hitbox);
+    }
     public boolean hitsBox(int [][] hitbox){
         if(hasHitbox==1
-            &&(!(hitbox[0][0]>this.hitbox[0][1]||hitbox[0][1]<this.hitbox[0][0])
-                &&!(hitbox[1][0]>this.hitbox[1][1]||hitbox[1][1]<this.hitbox[1][0]))){
+            &&wouldHitBox(hitbox)){
             return true;
         }
         return false;
     }
+    public boolean hitsBox(int[] point){
+        int[][]hitbox=new int[2][2];
+        hitbox[0][0]=point[0];
+        hitbox[0][1]=point[0];
+        hitbox[1][0]=point[1];
+        hitbox[1][1]=point[1];
+        return hitsBox(hitbox);
+    }
 
-    public void tick(boolean[] input){
+    public void tick(boolean[] boolInput, int[] intInput){
 
     }
 }

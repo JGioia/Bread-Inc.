@@ -5,7 +5,7 @@ public class Game {
 
     private ArrayList<Sprite> images= new ArrayList<Sprite>();;
     private int nextId=0, xOffset=0, yOffset=0;;
-    private final int backgroundLayer = 0, playerLayer = 1;
+    private final int backgroundLayer = 0, playerLayer = 1, UILayer=2;
     
     public Game(){
         String img = "postapocalypse1.png";
@@ -13,13 +13,18 @@ public class Game {
 
         String[][] imgs ={{"character.png"}};
         MainCharacter image = new MainCharacter(imgs, 100, 100, 60, 60, playerLayer, true, 0, 12, this);
+        
+        img = "IMGS/UI/9-Slice/Colored/green.png";
+        Button button = new Button(img, 0, 0, 60, 20, UILayer, true, 0);
+
         addSprite(image);
         addSprite(background);
+        addSprite(button);
     }
 
-    public ArrayList<Sprite> tick(boolean[] input){
+    public ArrayList<Sprite> tick(boolean[] boolInput, int[] intInput){
         for(int i=0;i<images.size();i++){
-            images.get(i).tick(input);
+            images.get(i).tick(boolInput,intInput);
         }
         return images;
     }
