@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - test",
+      "request": "launch",
+      "mainClass": "test",
+      "projectName": "Bread-Inc_cdf36296"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - GraphicalInterface",
       "request": "launch",
       "mainClass": "GraphicalInterface",

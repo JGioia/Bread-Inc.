@@ -3,19 +3,18 @@ import java.awt.event.*;
 import javax.swing.*;               // Needed for windows and frames
 import java.util.*;
 
-// Declare a new class called Game which uses JFrame and KeyListener
+// This is actually the main class which runs the game
 public class GraphicalInterface extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
 
+    //This is the ArrayList of sprites this class paints
     public static ArrayList<Sprite> images;
 
-    public int xOffset;
-    public int yOffset;
-    
-    private boolean upKey, downKey, rightKey, leftKey, mouseKey; 
-    private static boolean[] boolInput = new boolean[5];
-
-    private int mouseX, mouseY;
+    //
+    public int xOffset, yOffset, mouseX, mouseY;
+    private boolean upKey, downKey, rightKey, leftKey, mouseKey, escapeKey; 
+    private static boolean[] boolInput = new boolean[6];
     private static int[] intInput = new int[2];
+    private static double fps;
 
     private static Game game;
     
@@ -23,8 +22,14 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     public static void main( String[] args ) {
         GraphicalInterface graphicalInterface = new GraphicalInterface(); // Instantiate a game object which will store all our data
         game = new Game();
+        long time = System.currentTimeMillis();
         while( true ) { // Endless game loop
-            try { Thread.sleep(1000/20); } catch (InterruptedException e) {} // Set framerate to 60 frames per second
+            try { Thread.sleep(1000/60); } catch (InterruptedException e) {} // Set framerate to 60 frames per second
+            
+            //FPS checker
+            fps=1000/(System.currentTimeMillis()-(double)time);
+            time=System.currentTimeMillis();
+            
             images=game.tick(boolInput, intInput);
             graphicalInterface.heartbeat(); // Execute the game's heartbeat
         }
@@ -32,25 +37,34 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     
     // Game contructor to initialize all our data
     public GraphicalInterface() {
-        super("Game"); // Call the super (in this case JFrame) and set the window's title to "Game"
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Tell the application to close the whole application when the window is closed
-        setSize( 640, 480 ); // Set the size of the window
-        setResizable(false); // Disable the window from being resized
-        addKeyListener(this); // Attach a key listener to the window
+        super("Game"); // Call the super constructor and set the window's title to "Game"
+        
+        //Set properties of the frame
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize( 640, 480 ); 
+        setResizable(false);
+        setVisible(true);
+        setBackground(Color.black);
+        
+        //TODO: create loading screen
+
+        //add listeners to the frame
+        addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
-        setVisible(true); // Show the window
         
-        // Initialize our default keys
+        // Initialize default keys
         upKey = false;
         downKey = false;
         rightKey = false;
         leftKey = false;
         mouseKey = false;
 
+        // Initialize default mouse position
         mouseX=0;
         mouseY=0;
 
+        //Initialize default offsets
         xOffset=0;
         yOffset=0;
         
@@ -58,14 +72,17 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     
     // Heartbeat executes at the beginning of every frame
     public void heartbeat() {
-        // Call the screen to redraw the content, calls paint below
+        //this puts our inputs into an array
         boolInput[0]=upKey;
         boolInput[1]=downKey;
         boolInput[2]=rightKey;
         boolInput[3]=leftKey;
         boolInput[4]=mouseKey;
+        boolInput[5]=escapeKey;
         intInput[0]=mouseX;
         intInput[1]=mouseY;
+
+        //this runs the paint method indirectly
         repaint();
     }
     
@@ -75,8 +92,10 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         Image frame = createImage(getWidth(),getHeight());
         // Instantiate a graphics object to store all our items drawn to our frame
         Graphics frameGraphics = frame.getGraphics();
+
+        //this iterates through all of our sprites and draws them
         try{
-            for(int i=0;i<GraphicalInterface.images.size();i++){//why is there a null pointer exception
+            for(int i=0;i<GraphicalInterface.images.size();i++){
                 if(images.get(i).visibility)
                     frameGraphics.drawImage(
                         images.get(i).getImage(), 
@@ -89,90 +108,82 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         
         
         //Debug Graphics
-        frameGraphics.setColor( Color.BLUE );
-        frameGraphics.drawString(images.get(0).getHitboxToString(), 10, 82 );
-        frameGraphics.drawString(images.get(2).getHitboxToString(), 10, 62 );
-        if(mouseKey)
-            frameGraphics.drawString("True", 10, 102 );
-        else
-            frameGraphics.drawString("False", 10, 102 );
-        frameGraphics.drawString(mouseX+", "+mouseY, 10, 122 );
-        page.drawImage(frame,0,0,null);
+            frameGraphics.setColor( Color.BLUE );
+            frameGraphics.drawString(""+escapeKey,10,82);
+        /*
+            frameGraphics.drawString("FPS: "+fps, 10, 82 );    
+            frameGraphics.drawString(images.get(1).getHitboxToString(), 10, 82 );
+            frameGraphics.drawString(images.get(2).getHitboxToString(), 10, 62 );
+            if(mouseKey)
+                frameGraphics.drawString("True", 10, 102 );
+            else
+                frameGraphics.drawString("False", 10, 102 );
+            frameGraphics.drawString(game.getXOffset()+", "+game.getYOffset(), 10, 122 );
+        */
         
+        //this draws the image we just made to the screen
+        page.drawImage(frame,0,0,null);
     }
     
-    // We implement a KeyListener so we need three KeyListener methods
+    // We implement a KeyListener so we need the KeyListener methods
     public void keyPressed(KeyEvent e) {
-        // check if either the 'w' key or the up arrow is the key being pressed
         if( e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP ) {
-            // if either is being pressed, set the upKey boolean to true
             upKey = true;
         }
-        // check if either the 's' key or the down arrow is the key being pressed
         if( e.getKeyChar() == 's' || e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            // if either is being pressed, set the downKey boolean to true
             downKey = true;
         }
-        // check if either the 'd' key or the right arrow is the key being pressed
         if( e.getKeyChar() == 'd' || e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            // if either is being pressed, set the rightKey boolean to true
             rightKey = true;
         }
-        // check if either the 'a' key or the left arrow is the key being pressed
         if( e.getKeyChar() == 'a' || e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            // if either is being pressed, set the leftKey boolean to true
             leftKey = true;
+        }
+        if( e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            escapeKey=true;
         }
     } 
     public void keyReleased(KeyEvent e) {
-        // check if either the 'w' key or the up arrow is the key being released
         if( e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP ) {
-            // if either is being released, set the rightKey boolean to false
             upKey = false;
         }
-        // check if either the 's' key or the down arrow is the key being released
         if( e.getKeyChar() == 's' || e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            // if either is being released, set the rightKey boolean to false
             downKey = false;
         }
-        // check if either the 'd' key or the right arrow is the key being released
         if( e.getKeyChar() == 'd' || e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            // if either is being released, set the rightKey boolean to false
             rightKey = false;
         }
-        // check if either the 'a' key or the left arrow is the key being released
         if( e.getKeyChar() == 'a' || e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            // if either is being released, set the rightKey boolean to false
             leftKey = false;
         }
+        if( e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            escapeKey=false;
+        }
     }
-    
-    // We need to also override the KeyTyped method for a KeyListener, but we don't actually do anything with it
     public void keyTyped(KeyEvent e) { 
     }
 
+    // We implement a MouseListener so we need the MouseListener methods
     public void mousePressed(MouseEvent e) {
         mouseKey=true;
     }
- 
     public void mouseReleased(MouseEvent e) {
         mouseKey=false;
     }
- 
     public void mouseEntered(MouseEvent e) {
     }
- 
     public void mouseExited(MouseEvent e) {
     }
- 
     public void mouseClicked(MouseEvent e) {
     }
 
+    // We implement a MouseMotionListener so we need the MouseMotionListener methods
     public void mouseDragged(MouseEvent e){
     }
-
     public void mouseMoved(MouseEvent e){
-        mouseX=e.getX()+game.getXOffset();
-        mouseY=e.getY()+game.getYOffset();
+        try{
+            mouseX=e.getX()+game.getXOffset();
+            mouseY=e.getY()+game.getYOffset();
+        }catch(NullPointerException i){}
     }
 }
