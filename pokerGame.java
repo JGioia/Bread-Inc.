@@ -213,7 +213,7 @@ public class pokerGame{
             }
         }
 
-        if(t1.getTurn()==-1){
+        if(t1.getTurn()==0){
             startRound();
         }else if(playerMove==lastRaise){
             if(startOfRound){
@@ -253,7 +253,7 @@ public class pokerGame{
         winner = pokerHands.getWinner(t1);
         t1.givePotToPlayer(winner);
         wonRound=true;
-        t1.setTurn(-1);
+        t1.setTurn(0);
     }
 
     public void inBetweenRound(){
