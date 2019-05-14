@@ -3,9 +3,8 @@ public class EscapeMenu extends Menu{
         super(createButtons(menuLayer), createBackground(menuLayer), game, true);
     }
     public static Button[] createButtons(int menuLayer){
-        String imgName="IMGS/UI/9-Slice/Colored/green.png";
         Button[] buttons = new Button[1];
-        buttons[0] = new Button(imgName, 210, 160, 80, 30, menuLayer+1, false, 0);
+        buttons[0] = new Button(210, 160, 80, 30, menuLayer+1, false, 0);
         return buttons;
     }
     public static Sprite[] createBackground(int menuLayer){

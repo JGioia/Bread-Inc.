@@ -1,8 +1,9 @@
 # Classes
+## GraphicalInterface.java
+- This class has the main method
 ## Game.java
 - This class runs the game
 - Ways to be moved
-# Class 1
 
 
 ## Images arraylist
@@ -33,6 +34,3 @@
   - Characteristic 5 is the visibility
 ## Paint Method
 - The paint method draws all of the images in the arraylist in order if they are visible
-```
-Code
-```

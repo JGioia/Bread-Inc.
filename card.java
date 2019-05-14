@@ -1,23 +1,46 @@
-public class card{
+import java.awt.*;  
+import java.io.*;
+import javax.imageio.*;
+public class card extends Sprite{
     private String suit;
     private String suitShorthand;
     private String face;
     private String faceShorthand;
     private int faceValue;
+    private Image[] imgs;
+    private boolean onFront;
 
-    public card(String suit, String face){
+    public card(String suit, String face, int layer){
+        super(getImageName(suit, face), 0, 0, 82, 118, layer, true, -1);
         this.suit=suit;
         this.face=face;
-        faceValue=faceToValue(face);
+        setFaceValue();
         setFaceShorthand();
         setSuitShorthand();
-    }
-    public card(int faceValue){
-        suit="Spades";
-        this.faceValue=faceValue;
+        imgs = new Image[2];
+        try {
+            imgs[0] = ImageIO.read( new File(getImageName(suit, face)) );
+            imgs[1] = ImageIO.read(new File("IMGS/Cards/backRed.png"));
+        } catch( IOException f ) {
+            f.printStackTrace();
+        }
+        onFront=false;
     }
 
-    private int faceToValue(String face){
+    public card(int cardValue){
+        super(getImageName("Spades", "Ace"), 0, 0, 82, 118, -1, false, -1);
+        this.faceValue=cardValue;
+    }
+
+    private static String getImageName(String suit, String face){
+        int faceValue=faceToValue(face);
+        return "IMGS/Cards/"+setStaticFaceShorthand(faceValue)+setStaticSuitShorthand(suit)+".png";
+    }
+
+    private void setFaceValue(){
+        faceValue=faceToValue(face);
+    }
+    private static int faceToValue(String face){
         int value=0;
         switch(face){
             case "Two":
@@ -62,7 +85,12 @@ public class card{
         }
         return value;
     }
+
     private void setSuitShorthand(){
+        suitShorthand=setStaticSuitShorthand(suit);
+    }
+    private static String setStaticSuitShorthand(String suit){
+        String suitShorthand="";
         switch(suit){
             case "Spades":
                 suitShorthand="S";
@@ -77,26 +105,44 @@ public class card{
                 suitShorthand="C";
                 break;
         }
+        return suitShorthand;
     }
+
+
     private void setFaceShorthand(){
+        faceShorthand=setStaticFaceShorthand(faceValue);
+    }
+    private static String setStaticFaceShorthand(int faceValue){
+        String faceShorthand="";
         if(faceValue<11){
             faceShorthand=Integer.toString(faceValue);
         }else{
-            switch(face){
-                case "Jack":
+            switch(faceValue){
+                case 11:
                     faceShorthand="J";
                     break;
-                case "Queen":
+                case 12:
                     faceShorthand="Q";
                     break;
-                case "King":
+                case 13:
                     faceShorthand="K";
                     break;
-                case "Ace":
+                case 14:
                     faceShorthand="A";
                     break;
             }
         }
+        return faceShorthand;
+    }
+
+    public void changeOnFront(){
+        onFront=!onFront;
+    }
+    public void setOnFront(boolean onFront){
+        this.onFront=onFront;
+    }
+    public boolean getOnFront(){
+        return onFront;
     }
 
     public int compareTo(Object c1){
@@ -137,5 +183,11 @@ public class card{
 
     public String toString(){
         return faceShorthand + suitShorthand;
+    }
+
+    public Image getImage(){
+        if(onFront)
+            return imgs[0];
+        return imgs[1];
     }
 }

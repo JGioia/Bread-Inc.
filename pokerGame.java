@@ -1,120 +1,277 @@
-import java.util.*;
+import com.sun.beans.editors.BooleanEditor;
+
 public class pokerGame{
-    static table t1;
-    static boolean won=false;
-    static boolean wonRound;
+    table t1;
+    boolean won=false, lost=false, wonRound=false, continuing=true, raising=false, inputting=false, botting=false, startOfRound=true, betweenRound=false;
+    int layer, playerMove=-1, lastRaise=0, winner;
+    Game g;
+    Sprite[] sprites;
+    Text[] texts;
 
-    public static void main(String [] args){
-        initialization();
-        while(!won){
-            round();
+    public pokerGame(int layer, Game g){
+        this.layer=layer;
+        this.g=g;
+        deck d1 = new deck(layer, g);
+        String[] names = {"Bot 1", "Bot 2", "Bot 3", "Player"};
+        t1 = new table(d1, g, names, 50, layer);
+        sprites = new Sprite[7];
+        texts = new Text[1];
+        sprites[0] =  new TextButton(20, 990, 150,52, layer, false, 0, "Check");
+        sprites[1] =  new TextButton(20, 990, 150,52, layer, false, 0, "Call");
+        sprites[2] =  new TextButton(410,990,150,52, layer, false, 0, "Raise");
+        sprites[3] =  new TextButton(820,990,150,52,layer,false,0,"Fold");
+        sprites[4] =  new TextButton(1230,990,150,52,layer,false,0,"Continue");
+        sprites[5] =  new DraggableButton(50, 900, 1005, false, layer);
+        sprites[6] = new Sprite("IMGS/UI/9-Slice/Ancient/tan.png", 0, 980, 1920, 1080, layer-1, true, -1);
+        int[] point = {0,0};
+        texts[0]= new Text("", layer, point);
+        for(Sprite s : sprites)
+            s.initialize(g);
+        for(Text t : texts){}
+            //t.initialize(g);
+        startRound();
+    }
+
+    /*
+    boolInput[0]=check;
+    boolInput[1]=raise;
+    boolInput[2]=fold;
+    boolInput[3]=continue;
+    boolInput[4]=quit;
+    intInput=raiseAmount;
+    */
+    public void tick(boolean[] rawBoolInput, int[] rawIntInput){
+        boolean[] boolInput = new boolean[5];
+        for(int i=0 ; i<5;i++)
+            boolInput[i] = sprites[i].tick(rawBoolInput, rawIntInput);
+        for(int i=5;i<sprites.length;i++){
+            sprites[i].tick(rawBoolInput, rawIntInput);
         }
-        turn();
+        DraggableButton d = (DraggableButton) sprites[5];
+        int intInput = (int)((d.getPercentAcross())*t1.playerMaxRaise(3));
+
+        t1.setSprites();
+        t1.refreshPot();
+
+        if(won){
+            //TODO:setSpritesWon();
+        }else if(lost){
+            //TODO:setSpritesLost();
+        }else if(wonRound){
+            t1.setSpritesPlayerWon(winner);
+            setSpritesContinuing();
+            System.out.println("Clear");
+            if(boolInput[4]){
+                wonRound=false;
+                betweenRound=true;
+            }
+        }else if(betweenRound){
+            inBetweenRound();
+            t1.setSpritesPlayerWon(winner);
+            setSpritesContinuing();
+            if(boolInput[4]){
+                betweenRound=false;
+                nextMove();
+            }
+        }else if(continuing){
+            setSpritesContinuing();
+            if(boolInput[4]){
+                nextMove();
+                continuing=false;
+            }
+        }else if(raising){
+            setSpritesRaising();
+            if(boolInput[4]){
+                t1.raisePlayer(3, intInput);
+                nextMove();
+            }
+        }else if(inputting){
+            setSpritesInputing();//check which actions are possible
+            if(boolInput[0]||boolInput[1]){
+                check(3);
+                nextMove();
+            }else if(boolInput[2]){
+                raising=true;
+                inputting=false;
+            }else if(boolInput[3]){
+                fold(3);
+                nextMove();
+            }
+        }else if(botting){
+            String botInput = pokerAI.getInput(getStringInputs(playerMove));
+            check(playerMove);
+            continuing=true;
+        }
+
+        /*
+        won=t1.checkWon();
+        lost=t1.checkLost(3);
+        */
 
     }
-    
-    private static void initialization(){
-        Scanner scan = new Scanner(System.in);
-        deck d1 = new deck();
-        String numPlayersMessage = "Number of players: ";
-        int numPlayers = simpleConsole.getIntInput(2, numPlayersMessage);
-        String [] names=new String[numPlayers];
-        for(int i=0;i<numPlayers;i++){
-            System.out.println("What is player "+(i+1)+"'s name?");
-            names[i]=scan.nextLine();
-        }
 
-        simpleConsole.clearScreen();
-        t1 = new table(d1, names, 50);
+    public void fold(int playerNum){
+        t1.foldPlayer(playerNum);
     }
 
-    public static void turn(){
-        t1.incrTurn();
-        simpleConsole.clearScreen();
-        System.out.println(t1);
-        simpleConsole.enterContinue();
+    public void check(int playerNum){
+        if(t1.playerCanCall(playerNum))
+            t1.callPlayer(playerNum);
+    }
+
+    public void hideSprites(){
+        for(Sprite s : sprites)
+            s.setVisibility(false);
+        for(Text t: texts)
+            t.setVisibility(false);
+    }
+
+    public void setSpritesContinuing(){
+        hideSprites();
+        sprites[4].setVisibility(true);
+    }
+
+    public void setSpritesInputing(){
+        boolean[] posInputs = getPossibleInputs(3);
+        for(int i=0;i<4;i++)
+            sprites[i].setVisibility(posInputs[i]);
+        sprites[5].setVisibility(false);
+        sprites[6].setVisibility(false);
+        texts[0].setVisibility(false);
+    }
+
+    public void setSpritesRaising(){
+        for(int i=0;i<4;i++){
+            sprites[i].setVisibility(false);
+        }
+        sprites[5].setVisibility(true);
+        //sprites[6].setVisibility(true);
+        try{
+            texts[0].setVisibility(false);
+        }catch(NullPointerException e){
+
+        }
+        int[] point={1000, 990};
+        DraggableButton d = (DraggableButton) sprites[5];
+        int raise = (int)((d.getPercentAcross())*t1.playerMaxRaise(3));
+        texts[0]=new Text("Raise: "+raise, layer, point);
+        texts[0].setVisibility(true);
+    }
+
+    public boolean[] getPossibleInputs(int playerNum){
+        boolean[] result = new boolean[4];
+        for(boolean temp : result)
+            temp=false;
+        result[3]=true;
+        if((t1.getPlayerBet(playerNum)!=t1.getHighestBet())&&t1.playerCanRaise(playerNum)){
+            result[1]=true;
+        }else{
+            result[0]=true;
+        }
+        if(t1.playerCanRaise(playerNum)){
+            result[2]=true;
+        }
+        return result;
+    }
+
+    public String[] getStringInputs(int playerNum){
+        boolean[] inputs = getPossibleInputs(playerNum);
+        int resultLength =0;
+        for(boolean temp : inputs)
+            if(temp)
+                resultLength++;
+        String[] result = new String[resultLength];
         int i=0;
-        while(i<t1.getPlayers().length||!t1.readyToContinue()){//doesn't end at the right time
-            if(i>=t1.getPlayers().length)
-                i=0;
-            int playersAlive=0;
-            for(int j=0;j<t1.getPlayers().length;j++){
-                if(!t1.playerHasFeld(j))
-                    playersAlive++;
-            }
-            if(playersAlive<2){
-                wonRound=true;
-                break;
-            }
-
-            if(!t1.playerHasFeld(i)){
-                simpleConsole.clearScreen();
-                System.out.println(t1.toStringPlayerView(i));
-                String[] options = new String[3];
-                options[0]="Fold";
-                if(t1.playerCanRaise(i))
-                    options[2]="Raise";
-                if(t1.getPlayerBet(i)==t1.getHighestBet()){
-                    options[1]="Check";
-                }else{
-                    if(t1.playerCanCall(i))
-                        options[1]="Call";
-                }
-                for(int j=0;j<options.length;j++){
-                    if(options[j]==null){
-                        String[] temp=new String[options.length-1];
-                        for(int k=0;k<temp.length;k++){
-                            if(i<j)
-                                temp[k]=options[k];
-                            else
-                                temp[k]=options[k+1];
-                        }
-                        options=temp;
-                    }
-                }
-                //side pots?
-                String command;
-                if(t1.playerIsHuman(i)){
-                    command = simpleConsole.getInputFromOptions(options);
-                }else{
-                    command = pokerAI.getInput(options);
-                }
-                if(command.toUpperCase().equals("FOLD")){
-                    t1.foldPlayer(i);
-                }else if(command.toUpperCase().equals("RAISE")){
-                    String message="How much do you want to bet:";
-                    t1.raisePlayer(i,simpleConsole.getIntInput(t1.playerMaxRaise(i), 0, message));
-                }else if(command.toUpperCase().equals("CALL")){
-                    t1.callPlayer(i);
-                }
-                t1.refreshPot();
-            }
+        if(inputs[0]){
+            result[i]="Check";
             i++;
         }
+        if(inputs[1]){
+            result[i]="Call";
+            i++;
+        }
+        if(inputs[2]){
+            result[i]="Raise";
+            i++;
+        }
+        if(inputs[3]){
+            result[i]="Fold";
+            i++;
+        }
+        return result;
     }
 
-    public static void round(){
-        t1.incrRound();
-        t1.setTurn(0);
-        wonRound=false;
-        t1.givePlayersXCards(2);
-        t1.makeHandsInvisible();
-        turn();
-        if(!wonRound){
+    public void nextMove(){
+        playerMove++;
+        if(playerMove>=4){
+            playerMove=0;
+        }
+        while(t1.playerHasFeld(playerMove)){
+            playerMove++;
+            if(playerMove>=4){
+                playerMove=0;
+            }
+        }
+
+        if(t1.getTurn()==-1){
+            startRound();
+        }else if(playerMove==lastRaise){
+            if(startOfRound){
+                startOfRound=false;
+            }else{
+                incrTurn();
+            }
+        }
+
+        won=false;
+        lost=false;
+        continuing=false;
+        raising=false;
+        inputting=false;
+        botting=false;
+
+        if(playerMove<3){
+            botting=true;
+        }else{
+            inputting=true;
+        }
+    }
+
+    public void incrTurn(){
+        t1.incrTurn();
+        if(t1.getTurn()==1)
             t1.takeCards(3);
-            turn();
+        else if(t1.getTurn()>=4){
+            endRound();
+        }else{
+            t1.takeCards(1);
         }
-        if(!wonRound){
-            t1.takeCard();
-            turn();
+    }
+    
+    public void endRound(){
+        winner = pokerHands.getWinner(t1);
+        t1.givePotToPlayer(winner);
+        wonRound=true;
+        t1.setTurn(-1);
+    }
+
+    public void inBetweenRound(){
+        t1.incrRound();
+        playerMove=-1;
+        lastRaise=0;
+        t1.removePlayersCards();
+        t1.clearCards();
+        t1.unfoldPlayers();
+        t1.shuffleDeck();
+    }
+
+    public void startRound(){
+        incrTurn();
+        startOfRound=true;
+        t1.givePlayersXCards(2);
+        for(int i=0;i<4;i++){
+            t1.betPlayer(i, 2);
         }
-        if(!wonRound){
-            t1.takeCard();
-            turn();
-        }
-        simpleConsole.clearScreen();
-        int winner = pokerHands.getWinner(t1);
-        System.out.println(t1.toStringPlayerWon(winner));
-        simpleConsole.enterContinue();
+        nextMove();
     }
 }

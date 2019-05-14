@@ -41,12 +41,12 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         
         //Set properties of the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize( 640, 480 ); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //setSize(500,500);
+        setUndecorated(true);
         setResizable(false);
         setVisible(true);
         setBackground(Color.black);
-        
-        //TODO: create loading screen
 
         //add listeners to the frame
         addKeyListener(this);
@@ -107,7 +107,7 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         }catch(Exception nulLPointerException){}
         
         
-        //Debug Graphics
+        /*Debug Graphics
             frameGraphics.setColor( Color.BLUE );
             frameGraphics.drawString(""+escapeKey,10,82);
         /*
@@ -179,6 +179,10 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
 
     // We implement a MouseMotionListener so we need the MouseMotionListener methods
     public void mouseDragged(MouseEvent e){
+        try{
+            mouseX=e.getX()+game.getXOffset();
+            mouseY=e.getY()+game.getYOffset();
+        }catch(NullPointerException i){}
     }
     public void mouseMoved(MouseEvent e){
         try{

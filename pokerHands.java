@@ -2,11 +2,11 @@ import java.util.ArrayList;
 
 public class pokerHands{
     public static void main(String[] args){//test method
-        card c1 = new card("Spades","Seven");
-        card c2 = new card("Spades", "Six");
-        card c3 = new card("Spades","Eight");
-        card c4 = new card("Spades", "Nine");
-        card c5 = new card("Spades","Jack");
+        card c1 = new card("Spades","Seven",0);
+        card c2 = new card("Spades", "Six",0);
+        card c3 = new card("Spades","Eight",0);
+        card c4 = new card("Spades", "Nine",0);
+        card c5 = new card("Spades","Jack",0);
         card[] cards = {c1,c2,c3,c4,c5};
         System.out.println(getCombinationValue(cards));
     }
@@ -31,7 +31,6 @@ public class pokerHands{
     public player p;
     public table t;
     
-    //doesn't work if the game ends early by fold
     public pokerHands(player p, table t){
         this.p=p;
         this.t=t;

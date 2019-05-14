@@ -3,23 +3,36 @@ import java.awt.*;
 import java.io.*;
 import javax.imageio.*; 
 public class CharSprite extends Sprite{
-    public CharSprite(char c){
-        super(getCharImage(c), xPos, yPos, xSize, ySize, layer, visibility, hasHitbox)
+    private static BufferedImage image;
+    public CharSprite(char c, int xPos, int yPos, int xSize, int ySize, int layer, boolean visibility, int hasHitbox){
+        super(getCharImage(c), xPos, yPos, xSize, ySize, layer, visibility, hasHitbox);
     }
-    public static Image getCharImage(char c){
-        BufferedImage image;
-        int charSize=8;
-        int startX,startY;
+    public static Image getCharImage(char c){//TODO: add :
+        String imgString = "IMGS/Pack2/Font/";
+        if(c>=65&&c<=90){//uppercase
+            imgString+=c;
+        }else if(c>=97&&c<=122){//lowercase
+            imgString+=c+"L";
+        }else if(c==46){//period
+            imgString+="Pd";
+        }else if(c==44){//comma
+            imgString+=c;
+        }else if(c==33){//exclammation mark
+            imgString+=c;
+        }else if(c==63){//question mark
+            imgString+="QM";
+        }else if(c>=48&&c<=57){//numbers
+            imgString+=c;
+        }else{//space
+            imgString+="Sp";
+        }
+        imgString+=".png";
+
         try {
-            image= ImageIO.read( new File("Pack2/font.png") );
+            image = ImageIO.read( new File(imgString) );
         } catch( IOException i ) {
             i.printStackTrace();
         }
-        if(c>=65&&c<=90){
-
-        }
-        BufferedImage img = image.getSubimage(startX, startY, startX+charSize, startY+charSize); //fill in the corners of the desired crop location here
-        BufferedImage croppedImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
-        return croppedImage;
+        return image;
     }
 }

@@ -2,17 +2,28 @@ public class deck{
     private card [] cards=new card[52];
     private final String [] suitList = {"Hearts", "Spades", "Diamonds", "Clubs"};
     private final String [] faceList = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"};
-    public deck(){
+    private int layer;
+    private int[] position={0,0};
+    private Game g;
+    public deck(int layer, Game g){
+        this.layer=layer;
         cards=initializeDeck();
         shuffle();
+        this.g=g;
+        initialize();
     }
 
     public card [] initializeDeck(){
         card [] result = new card[52];
         for(int i=0;i<suitList.length;i++)
             for(int j=0;j<faceList.length;j++)
-                result[i*13+j]=new card(suitList[i],faceList[j]);
+                result[i*13+j]=new card(suitList[i],faceList[j],layer);
         return result;
+    }
+
+    public void initialize(){
+        for(card temp : cards)
+            temp.initialize(g);
     }
     
     public void shuffle(){
@@ -25,7 +36,7 @@ public class deck{
     }
     
     public card takeTopCard(){
-        card result = new card("Hearts","Two");
+        card result = new card("Hearts","Two",0);
         if(cards.length>0){
             result=cards[0];
             card [] temp = new card[cards.length-1];
@@ -47,6 +58,24 @@ public class deck{
     public void addCards(card[] newCards){
         for(int i=0;i<newCards.length;i++)
             addCard(newCards[i]);
+    }
+
+    public void setLayer(int layer){
+        this.layer=layer;
+    }
+    public int getLayer(){
+        return layer;
+    }
+
+    public void setPosition(int[] position){
+        this.position=position;
+        for(card temp : cards){
+            temp.setXPos(position[0]);
+            temp.setYPos(position[1]);
+        }
+    }
+    public int[] getPosition(){
+        return position;
     }
 
     public void printDeck(){

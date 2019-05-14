@@ -1,15 +1,22 @@
 public class table extends simpleCardGroup{
     private player [] players;
-    private int pot,turnNum=0, roundNum=0;;
+    private int pot,turnNum=0, roundNum=0, layer;
+    private Game g;
+    private Text[] texts = new Text[0];
 
-    public table(deck d1, String[] names, int money){
+    public table(deck d1, Game g, String[] names, int money, int layer){
         super (d1);
-        players=new player[names.length+1];
+        this.layer = layer;
+        this.g=g;
+        players=new player[names.length];
         for(int i=0;i<names.length;i++){
-            players[i]= new player(d1, money, names[i]);
+            if(i==4)
+                players[i]= new player(d1, g , money, names[i], layer);
+            else
+                players[i]= new player(d1, g , money, names[i], layer, false);
         }
-        players[names.length]=new player(d1, money, "Bot", false);
         refreshPot();
+        setSprites();
     }
 
     public void refreshPot(){
@@ -211,5 +218,84 @@ public class table extends simpleCardGroup{
         returnCardsToDeck();
         unfoldPlayers();
         return result;
+    }
+
+    public void setTexts(boolean playerWon, int playerNum){
+        for(Text text: texts)
+            text.setVisibility(false);
+        
+        texts = new Text[3];
+        if(playerWon)
+            texts = new Text[4];
+        int[] position = {500,400};
+        texts[0]=new Text("Round: "+roundNum, layer, position);
+        position[1]+=12;
+        texts[1]=new Text("Turn: "+turnNum, layer, position);
+        position[1]+=12;
+        texts[2]=new Text("Pot: "+pot, layer, position);
+        position[1]+=12;
+        if(playerWon)
+            texts[3] = new Text(players[playerNum].getName()+" won this hand!", layer, position);
+
+        int textLength=0;
+        for(Text text : texts)
+            textLength+=text.getLength();
+
+        Sprite[] sprites = new Sprite[textLength];
+
+        int j=0;
+        for(Text text : texts){
+            for(int k=0;k<text.getLength();k++){
+                sprites[j]=text.getSprite(k);
+                j++;
+            }
+        }
+        g.addSprites(sprites);
+    }
+    public void setPlayers(){
+        int[] position = {800,30};
+        if(players.length>0)
+            players[0].setPosition(position);
+        position[0]=10;
+        position[1]=400;
+        if(players.length>1)
+            players[1].setPosition(position);
+        position[0]=1600;
+        position[1]=400;
+        if(players.length>2)
+            players[2].setPosition(position);
+        position[0]=800;
+        position[1]=800;
+        if(players.length>3){
+            players[3].setPosition(position);
+            players[3].setCardsVisible();
+        }
+    }
+    public void setCards(){
+        int[] position = {600,400};
+        getDeck().setPosition(position);
+        card[] cards = this.getCards();
+        for(int i=0;i<cards.length;i++){
+            cards[i].setOnFront(true);
+            cards[i].setXPos(700+(i*82));
+            cards[i].setYPos(400);
+        }
+    }
+
+    public void setSprites(){
+        for(player p : players){
+            p.setCardsInvisible();
+        }
+        setTexts(false, 0);
+        setPlayers();
+        setCards();
+    }
+    public void setSpritesPlayerWon(int playerNum){
+        for(player p : players){
+            p.setCardsVisible();
+        }
+        setTexts(true, playerNum);
+        setPlayers();
+        setCards();
     }
 }

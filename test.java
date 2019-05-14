@@ -3,6 +3,8 @@ import javax.sound.sampled.*;
 
 public class test{
     public static void main(String[] args){
+        System.out.println('A'==65);
+        /*
         File yourFile = new File("Music/BeepBox6.wav");
         AudioInputStream stream;
         AudioFormat format;
@@ -31,5 +33,6 @@ public class test{
         catch (Exception e) {
             //whatevers
         }
+        */
     }
 }

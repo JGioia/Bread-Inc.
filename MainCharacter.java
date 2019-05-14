@@ -39,7 +39,7 @@ public class MainCharacter extends Character{
         return false;
     }
 
-    public void tick(boolean[] boolInput, int[] intInput){
+    public boolean tick(boolean[] boolInput, int[] intInput){
         setXPos(game.getXOffset()+xOffset);
         setYPos(game.getYOffset()+yOffset);
         if(boolInput[0])
@@ -50,5 +50,6 @@ public class MainCharacter extends Character{
             moveRight();
         if(boolInput[3])
             moveLeft();
+        return false;
     }
 }

@@ -7,23 +7,32 @@ public class Game {
     private int nextId=0, xOffset=0, yOffset=0;;
     private final int backgroundLayer = 0, playerLayer = 1, UILayer=2, menuLayer=3;
     private EscapeMenu escapeMenu;
+    private Button b;
+    private pokerGame p;
     
     public Game(){
-        String img = "postapocalypse1.png";
-        Sprite background = new Sprite(img, 0, 0, 640, 480, backgroundLayer, true, 0);
-
+        /*
         String[][] imgs ={{"character.png"}};
         MainCharacter image = new MainCharacter(imgs, 640/2-60/2, 480/2-60/2, 50, 50, playerLayer, true, 0, 12, this);
-        
-        img = "IMGS/UI/9-Slice/Colored/green.png";
-        int[] moveTo={-300,0};
-        Button button = new Button(img, 100, 200, 100, 50, UILayer, true, 1, moveTo, this);
+        */
 
         escapeMenu = new EscapeMenu(menuLayer, this);
 
-        addSprite(image);
-        addSprite(button);
-        createGrass(300,300);
+        /*
+        deck d = new deck(5, this);
+
+        String[] names = {"Ay","Him","them", "Player"};
+        table t = new table(d, this, names, 50, 5);
+        t.givePlayersXCards(2);
+        t.takeCard();
+        t.setSprites();
+
+        b = new DraggableButton(30, 400, 100, true, 30);
+        b.initialize(this);
+
+        createGrass(1920,1080);
+        */
+        p = new pokerGame(4,this);
     }
 
     public ArrayList<Sprite> tick(boolean[] boolInput, int[] intInput){
@@ -31,6 +40,7 @@ public class Game {
             images.get(i).tick(boolInput,intInput);
         }
         escapeMenu.tick(boolInput, intInput);
+        p.tick(boolInput, intInput);
         return images;
     }
 
@@ -51,6 +61,12 @@ public class Game {
             nextId++;
             added=true;
         }
+    }
+
+    public void addSprites(Sprite[] sprites){
+        for(Sprite sprite : sprites){
+            addSprite(sprite);       
+        }     
     }
 
     public boolean hitsBox(int[][] hitbox){
@@ -83,9 +99,10 @@ public class Game {
 
     public void createGrass(int xSize, int ySize){
         String img="IMGS/Pack2/grass.png";
-        for(int x=0;x<=xSize;x+=16){
-            for(int y=0;y<=ySize;y+=16){
-                Sprite grass = new Sprite(img, x, y, 16, 16, backgroundLayer, true, 0);
+        int spriteSize=32;
+        for(int x=0;x<=xSize;x+=spriteSize){
+            for(int y=0;y<=ySize;y+=spriteSize){
+                Sprite grass = new Sprite(img, x, y, spriteSize, spriteSize, backgroundLayer, true, 0);
                 addSprite(grass);
             }
         }

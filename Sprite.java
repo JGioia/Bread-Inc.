@@ -161,7 +161,11 @@ public class Sprite{
         return hitsBox(hitbox);
     }
 
-    public void tick(boolean[] boolInput, int[] intInput){
+    public boolean tick(boolean[] boolInput, int[] intInput){
+        return false;
+    }
 
+    public void initialize(Game g){
+        g.addSprite(this);
     }
 }

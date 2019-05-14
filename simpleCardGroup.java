@@ -27,6 +27,12 @@ public class simpleCardGroup{
     public card[] getCards(){
         return cards;
     }
+    public card getCard(int cardNum){
+        return cards[cardNum];
+    }
+    public int getLength(){
+        return cards.length;
+    }
     public void returnCards(){
         d1.addCards(cards);
         clearCards();
@@ -38,6 +44,9 @@ public class simpleCardGroup{
     }
     public void shuffleDeck(){
         d1.shuffle();
+    }
+    public deck getDeck(){
+        return d1;
     }
 
     public String toString(){
