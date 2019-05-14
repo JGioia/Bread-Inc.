@@ -60,7 +60,6 @@ public class pokerGame{
         }else if(wonRound){
             t1.setSpritesPlayerWon(winner);
             setSpritesContinuing();
-            System.out.println("Clear");
             if(boolInput[4]){
                 wonRound=false;
                 betweenRound=true;
@@ -71,6 +70,7 @@ public class pokerGame{
             setSpritesContinuing();
             if(boolInput[4]){
                 betweenRound=false;
+                startOfRound=true;
                 nextMove();
             }
         }else if(continuing){
@@ -238,6 +238,7 @@ public class pokerGame{
     }
 
     public void incrTurn(){
+        System.out.println("what");
         t1.incrTurn();
         if(t1.getTurn()==1)
             t1.takeCards(3);
@@ -259,8 +260,7 @@ public class pokerGame{
         t1.incrRound();
         playerMove=-1;
         lastRaise=0;
-        t1.removePlayersCards();
-        t1.clearCards();
+        t1.returnCardsToDeck();
         t1.unfoldPlayers();
         t1.shuffleDeck();
     }
