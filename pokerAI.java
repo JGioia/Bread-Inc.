@@ -1,7 +1,7 @@
-public class pokerAI{
-    player p;
-    table t;
-    public pokerAI(player p, table t){
+public class PokerAI{
+    Player p;
+    Table t;
+    public PokerAI(Player p, Table t){
         this.p=p;
         this.t=t;
     }

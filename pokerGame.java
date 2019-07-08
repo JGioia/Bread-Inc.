@@ -1,19 +1,19 @@
 import com.sun.beans.editors.BooleanEditor;
 
-public class pokerGame{
-    table t1;
+public class PokerGame{
+    Table t1;
     boolean won=false, lost=false, wonRound=false, continuing=true, raising=false, inputting=false, botting=false, startOfRound=true, betweenRound=false;
     int layer, playerMove=-1, lastRaise=0, winner;
     Game g;
     Sprite[] sprites;
     Text[] texts;
 
-    public pokerGame(int layer, Game g){
+    public PokerGame(int layer, Game g){
         this.layer=layer;
         this.g=g;
-        deck d1 = new deck(layer, g);
+        Deck d1 = new Deck(layer, g);
         String[] names = {"Bot 1", "Bot 2", "Bot 3", "Player"};
-        t1 = new table(d1, g, names, 50, layer);
+        t1 = new Table(d1, g, names, 50, layer);
         sprites = new Sprite[7];
         texts = new Text[1];
         sprites[0] =  new TextButton(20, 990, 150,52, layer, false, 0, "Check");
@@ -98,7 +98,7 @@ public class pokerGame{
                 nextMove();
             }
         }else if(botting){
-            String botInput = pokerAI.getInput(getStringInputs(playerMove));
+            String botInput = PokerAI.getInput(getStringInputs(playerMove));
             check(playerMove);
             continuing=true;
         }
@@ -250,7 +250,7 @@ public class pokerGame{
     }
     
     public void endRound(){
-        winner = pokerHands.getWinner(t1);
+        winner = PokerHands.getWinner(t1);
         t1.givePotToPlayer(winner);
         wonRound=true;
         t1.setTurn(0);

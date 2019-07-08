@@ -1,12 +1,12 @@
-public class simpleCardGroup{
-    private card [] cards = new card[0];
-    private deck d1;
-    public simpleCardGroup(deck d1){
+public class SimpleCardGroup{
+    private Card [] cards = new Card[0];
+    private Deck d1;
+    public SimpleCardGroup(Deck d1){
         this.d1=d1;
     }
     
-    public void addCard(card tempCard){
-        card [] tempCards = new card [cards.length+1];
+    public void addCard(Card tempCard){
+        Card [] tempCards = new Card [cards.length+1];
         for(int i=0;i<cards.length;i++){
             tempCards[i]=cards[i];
         }
@@ -22,12 +22,12 @@ public class simpleCardGroup{
     }
     
     public void clearCards(){
-        cards = new card[0];
+        cards = new Card[0];
     }
-    public card[] getCards(){
+    public Card[] getCards(){
         return cards;
     }
-    public card getCard(int cardNum){
+    public Card getCard(int cardNum){
         return cards[cardNum];
     }
     public int getLength(){
@@ -45,7 +45,7 @@ public class simpleCardGroup{
     public void shuffleDeck(){
         d1.shuffle();
     }
-    public deck getDeck(){
+    public Deck getDeck(){
         return d1;
     }
 

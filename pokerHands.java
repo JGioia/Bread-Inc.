@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 
-public class pokerHands{
+public class PokerHands{
     public static void main(String[] args){//test method
-        card c1 = new card("Spades","Seven",0);
-        card c2 = new card("Spades", "Six",0);
-        card c3 = new card("Spades","Eight",0);
-        card c4 = new card("Spades", "Nine",0);
-        card c5 = new card("Spades","Jack",0);
-        card[] cards = {c1,c2,c3,c4,c5};
+        Card c1 = new Card("Spades","Seven",0);
+        Card c2 = new Card("Spades", "Six",0);
+        Card c3 = new Card("Spades","Eight",0);
+        Card c4 = new Card("Spades", "Nine",0);
+        Card c5 = new Card("Spades","Jack",0);
+        Card[] cards = {c1,c2,c3,c4,c5};
         System.out.println(getCombinationValue(cards));
     }
 
     //doesn't work for ties
-    public static int getWinner(table t){
+    public static int getWinner(Table t){
         int winner=1;
         double winningScore=0;
         for(int i=0;i<t.getNumPlayers();i++){
-            pokerHands playerHand = new pokerHands(t.getPlayer(i),t);
+            PokerHands playerHand = new PokerHands(t.getPlayer(i),t);
             double bestValue=playerHand.getBestValue();
             if(bestValue>winningScore){
                 winningScore=bestValue;
@@ -26,17 +26,17 @@ public class pokerHands{
         return winner;
     }
     
-    public card[] cards;
-    public card[][] combinations;
-    public player p;
-    public table t;
+    public Card[] cards;
+    public Card[][] combinations;
+    public Player p;
+    public Table t;
     
-    public pokerHands(player p, table t){
+    public PokerHands(Player p, Table t){
         this.p=p;
         this.t=t;
-        card[] playerCards = p.getCards();
-        card[] tableCards = t.getCards();
-        cards = new card[playerCards.length+tableCards.length];
+        Card[] playerCards = p.getCards();
+        Card[] tableCards = t.getCards();
+        cards = new Card[playerCards.length+tableCards.length];
         for(int i=0;i<playerCards.length;i++){
             cards[i]=playerCards[i];
         }
@@ -46,9 +46,9 @@ public class pokerHands{
         int[][] combinationOrder=new int[0][0];
         if(cards.length==7){
             combinationOrder=nCr75();
-            combinations=new card[combinationOrder.length][combinationOrder[0].length];
+            combinations=new Card[combinationOrder.length][combinationOrder[0].length];
         }else{
-            combinations= new card[0][0];
+            combinations= new Card[0][0];
         }
         for(int i=0;i<combinations.length;i++)
             for(int j=0;j<combinations[i].length;j++)
@@ -111,7 +111,7 @@ public class pokerHands{
             5th High Card: 2-14
     */
 
-    public static double getCombinationValue(card[] combination){
+    public static double getCombinationValue(Card[] combination){
         double result=0;
         result+=hasStraightFlush(combination);
         result+=has4OfAKind(combination);
@@ -125,7 +125,7 @@ public class pokerHands{
         return result;
     }
     
-    public static double getHighCard(card[] combination){
+    public static double getHighCard(Card[] combination){
         double result=2;
         for(int i=0;i<combination.length;i++){
             if(combination[i].getFaceValue()>result)
@@ -133,7 +133,7 @@ public class pokerHands{
         }
         return result;
     }
-    public static double getHighCard(ArrayList<card> combination){
+    public static double getHighCard(ArrayList<Card> combination){
         double result=2;
         for(int i=0;i<combination.size();i++){
             if(combination.get(i).getFaceValue()>result)
@@ -142,12 +142,12 @@ public class pokerHands{
         return result;
     }
 
-    public static double hasStraightFlush(card[] combination){
+    public static double hasStraightFlush(Card[] combination){
         if(hasStraight(combination)>0&&hasFlush(combination)>0)
             return hasStraight(combination)*10000;
         return 0;
     }
-    public static double has4OfAKind(card[] combination){
+    public static double has4OfAKind(Card[] combination){
         double result=0;
         for(int i=0;i<combination.length;i++){
             if(findCardNumber(combination,combination[i]).size()>3){
@@ -157,15 +157,15 @@ public class pokerHands{
         }
         return result;
     }
-    public static double hasFullHouse(card[] combination){
+    public static double hasFullHouse(Card[] combination){
         double result=0;
         if(has3OfAKind(combination)>0){
-            card[] comCopy = new card[combination.length];
+            Card[] comCopy = new Card[combination.length];
             for(int i=0;i<comCopy.length;i++){
                 comCopy[i]=combination[i];
             }
             int pair1Value=(int)has3OfAKind(combination)/100000000;
-            card temp = new card(pair1Value);
+            Card temp = new Card(pair1Value);
             ArrayList<Integer> cardsToRemove =  findCardNumber(combination, temp);
             for(int i=cardsToRemove.size()-1;i>=0;i--){
                 comCopy=removeCard(comCopy, cardsToRemove.get(i));
@@ -178,7 +178,7 @@ public class pokerHands{
         }
         return result;
     }
-    public static double hasFlush(card[] combination){
+    public static double hasFlush(Card[] combination){
         double result=0;
         boolean hasFlush=true;
         String prevSuit="";
@@ -194,7 +194,7 @@ public class pokerHands{
             result+=10000000000.0*getHighCard(combination);
         return result;
     }
-    public static double hasStraight(card[] combination){
+    public static double hasStraight(Card[] combination){
         if(findCardNumber(combination, 14).size()==1&&findCardNumber(combination, 5).size()==1
             &&findCardNumber(combination, 4).size()==1&&findCardNumber(combination, 3).size()==1
             &&findCardNumber(combination, 2).size()==1){
@@ -209,7 +209,7 @@ public class pokerHands{
         }
         return 0.0;
     }
-    public static double has3OfAKind(card[] combination){
+    public static double has3OfAKind(Card[] combination){
         double result=0;
         for(int i=0;i<combination.length;i++){
             if(findCardNumber(combination,combination[i]).size()>2){
@@ -219,15 +219,15 @@ public class pokerHands{
         }
         return result;
     }
-    public static double has2Pair(card[] combination){//remove card method doesn't work
+    public static double has2Pair(Card[] combination){//remove card method doesn't work
         double result=0;
         if(hasPair(combination)>0){
-            card[] comCopy = new card[combination.length];
+            Card[] comCopy = new Card[combination.length];
             for(int i=0;i<comCopy.length;i++){
                 comCopy[i]=combination[i];
             }
             int pair1Value=(int)hasPair(combination)/1000000;
-            card temp = new card(pair1Value);
+            Card temp = new Card(pair1Value);
             ArrayList<Integer> cardsToRemove =  findCardNumber(combination, temp);
             for(int i=cardsToRemove.size()-1;i>=0;i--){
                 comCopy=removeCard(comCopy, cardsToRemove.get(i));
@@ -245,7 +245,7 @@ public class pokerHands{
         }
         return result;
     }
-    public static double hasPair(card[] combination){
+    public static double hasPair(Card[] combination){
         double result=0;
         for(int i=0;i<combination.length;i++){
             if(findCardNumber(combination,combination[i]).size()>1){
@@ -256,8 +256,8 @@ public class pokerHands{
         return result;
     }
 
-    public static double getHighCardValue(card[] combination){
-        ArrayList<card> comCopy= new ArrayList<card>();
+    public static double getHighCardValue(Card[] combination){
+        ArrayList<Card> comCopy= new ArrayList<Card>();
         for(int i=0;i<combination.length;i++){
             comCopy.add(combination[i]);
         }
@@ -276,8 +276,8 @@ public class pokerHands{
         return result;
     }
 
-    public static card[] removeCard(card[] cards, int cardPos){
-        card[] temp = new card[cards.length-1];
+    public static Card[] removeCard(Card[] cards, int cardPos){
+        Card[] temp = new Card[cards.length-1];
         for(int i=0;i<cards.length;i++){
             if(i<cardPos)
                 temp[i]=cards[i];
@@ -286,7 +286,7 @@ public class pokerHands{
         }
         return temp;
     }
-    public static ArrayList<Integer> findCardNumber(card[]cards, card c){
+    public static ArrayList<Integer> findCardNumber(Card[]cards, Card c){
         ArrayList<Integer> result = new ArrayList<Integer>();
         for(int i=0;i<cards.length;i++){
             if(c.getFaceValue()==cards[i].getFaceValue())
@@ -294,8 +294,8 @@ public class pokerHands{
         }
         return result;
     }
-    public static ArrayList<Integer> findCardNumber(card[]cards, int cardValue){
-        card c = new card(cardValue);
+    public static ArrayList<Integer> findCardNumber(Card[]cards, int cardValue){
+        Card c = new Card(cardValue);
         ArrayList<Integer> result= new ArrayList<Integer>();
         for(int i=0;i<cards.length;i++){
             if(c.getFaceValue()==cards[i].getFaceValue())

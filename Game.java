@@ -3,12 +3,12 @@ import java.util.*;
 //Declare a new class called Game which uses JFrame and KeyListener
 public class Game {
 
-    private ArrayList<Sprite> images= new ArrayList<Sprite>();;
-    private int nextId=0, xOffset=0, yOffset=0;;
+    private ArrayList<Sprite> images= new ArrayList<Sprite>();
+    private int nextId=0, xOffset=0, yOffset=0;
     private final int backgroundLayer = 0, playerLayer = 1, UILayer=2, menuLayer=3;
     private EscapeMenu escapeMenu;
     private Button b;
-    private pokerGame p;
+    private PokerGame p;
     
     public Game(){
         /*
@@ -32,7 +32,7 @@ public class Game {
 
         createGrass(1920,1080);
         */
-        p = new pokerGame(4,this);
+        p = new PokerGame(4,this);
     }
 
     public ArrayList<Sprite> tick(boolean[] boolInput, int[] intInput){

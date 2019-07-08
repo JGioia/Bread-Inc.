@@ -1,7 +1,7 @@
 import java.awt.*;  
 import java.io.*;
 import javax.imageio.*;
-public class card extends Sprite{
+public class Card extends Sprite{
     private String suit;
     private String suitShorthand;
     private String face;
@@ -10,7 +10,7 @@ public class card extends Sprite{
     private Image[] imgs;
     private boolean onFront;
 
-    public card(String suit, String face, int layer){
+    public Card(String suit, String face, int layer){
         super(getImageName(suit, face), 0, 0, 82, 118, layer, true, -1);
         this.suit=suit;
         this.face=face;
@@ -27,7 +27,7 @@ public class card extends Sprite{
         onFront=false;
     }
 
-    public card(int cardValue){
+    public Card(int cardValue){
         super(getImageName("Spades", "Ace"), 0, 0, 82, 118, -1, false, -1);
         this.faceValue=cardValue;
     }
@@ -147,27 +147,27 @@ public class card extends Sprite{
 
     public int compareTo(Object c1){
         int result=0;
-        if(faceValue>((card)c1).getFaceValue())
+        if(faceValue>((Card)c1).getFaceValue())
             result=1;
-        else if(faceValue<((card)c1).getFaceValue())
+        else if(faceValue<((Card)c1).getFaceValue())
             result=-1;
         else
             result=0;
         return result;
     }
-    public boolean isSuitEqual(card c1){
+    public boolean isSuitEqual(Card c1){
         boolean result = false;
         if(suit.equals(c1.getSuit()))
             result=true;
         return result;
     }
-    public boolean isCardOneGreater(card c1){
+    public boolean isCardOneGreater(Card c1){
         boolean result=false;
         if(c1.getFaceValue()+1==faceValue)
             result=true;
         return result;
     } 
-    public boolean isCardOneLess(card c1){
+    public boolean isCardOneLess(Card c1){
         boolean result=false;
         if(c1.getFaceValue()-1==faceValue)
             result=true;

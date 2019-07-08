@@ -1,5 +1,6 @@
 import java.util.Scanner;
-public class simpleConsole{
+
+public class SimpleConsole{
 
     public static void clearScreen(){
         for(int i=0;i<100;i++)

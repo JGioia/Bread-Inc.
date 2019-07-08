@@ -1,19 +1,19 @@
-public class table extends simpleCardGroup{
-    private player [] players;
+public class Table extends SimpleCardGroup{
+    private Player [] players;
     private int pot,turnNum=0, roundNum=0, layer;
     private Game g;
     private Text[] texts = new Text[0];
 
-    public table(deck d1, Game g, String[] names, int money, int layer){
+    public Table(Deck d1, Game g, String[] names, int money, int layer){
         super (d1);
         this.layer = layer;
         this.g=g;
-        players=new player[names.length];
+        players=new Player[names.length];
         for(int i=0;i<names.length;i++){
             if(i==4)
-                players[i]= new player(d1, g , money, names[i], layer);
+                players[i]= new Player(d1, g , money, names[i], layer);
             else
-                players[i]= new player(d1, g , money, names[i], layer, false);
+                players[i]= new Player(d1, g , money, names[i], layer, false);
         }
         refreshPot();
         setSprites();
@@ -39,34 +39,34 @@ public class table extends simpleCardGroup{
 
     public void removePlayer(int playerNum){
         if(playerNum>=0&&playerNum<players.length){
-            player[] temp= new player[players.length-1];
+            Player[] temp= new Player[players.length-1];
             for(int i=0;i<players.length;i++){
                 if(i<playerNum)
                     temp[i]=players[i];
                 else if(i>playerNum)
                     temp[i-1]=players[i];
             }
-            players= new player[temp.length];
+            players= new Player[temp.length];
             for(int i=0;i<players.length;i++){
                 players[i]=temp[i];
             }
         }
     }
-    public void addPlayer(player pNew){
-        player[] temp=new player[players.length];
+    public void addPlayer(Player pNew){
+        Player[] temp=new Player[players.length];
         for(int i=0;i<players.length;i++){
             temp[i]=players[i];
         }
-        players= new player[players.length+1];
+        players= new Player[players.length+1];
         for(int i=0;i<players.length-1;i++){
             players[i]=temp[i];
         }
         players[players.length-1]=pNew;
     }
-    public player [] getPlayers(){
+    public Player [] getPlayers(){
         return players;
     }
-    public player getPlayer(int playerNum){
+    public Player getPlayer(int playerNum){
         return players[playerNum];
     }
     public int getNumPlayers(){
@@ -274,7 +274,7 @@ public class table extends simpleCardGroup{
     public void setCards(){
         int[] position = {600,400};
         getDeck().setPosition(position);
-        card[] cards = this.getCards();
+        Card[] cards = this.getCards();
         for(int i=0;i<cards.length;i++){
             cards[i].setOnFront(true);
             cards[i].setXPos(700+(i*82));
@@ -283,7 +283,7 @@ public class table extends simpleCardGroup{
     }
 
     public void setSprites(){
-        for(player p : players){
+        for(Player p : players){
             p.setCardsInvisible();
         }
         setTexts(false, 0);
@@ -291,7 +291,7 @@ public class table extends simpleCardGroup{
         setCards();
     }
     public void setSpritesPlayerWon(int playerNum){
-        for(player p : players){
+        for(Player p : players){
             p.setCardsVisible();
         }
         setTexts(true, playerNum);

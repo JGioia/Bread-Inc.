@@ -12,8 +12,8 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     //
     public int xOffset, yOffset, mouseX, mouseY;
     private boolean upKey, downKey, rightKey, leftKey, mouseKey, escapeKey; 
-    private static boolean[] boolInput = new boolean[6];
-    private static int[] intInput = new int[2];
+    public static boolean[] boolInput = new boolean[6];
+    public static int[] intInput = new int[2];
     private static double fps;
 
     private static Game game;
@@ -42,7 +42,6 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         //Set properties of the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //setSize(500,500);
         setUndecorated(true);
         setResizable(false);
         setVisible(true);
@@ -163,7 +162,6 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     public void keyTyped(KeyEvent e) { 
     }
 
-    // We implement a MouseListener so we need the MouseListener methods
     public void mousePressed(MouseEvent e) {
         mouseKey=true;
     }
@@ -177,7 +175,6 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
     public void mouseClicked(MouseEvent e) {
     }
 
-    // We implement a MouseMotionListener so we need the MouseMotionListener methods
     public void mouseDragged(MouseEvent e){
         try{
             mouseX=e.getX()+game.getXOffset();

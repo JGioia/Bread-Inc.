@@ -1,11 +1,11 @@
-public class player extends simpleCardGroup{
+public class Player extends SimpleCardGroup{
     private int money, bet, layer=5;
     private boolean visibleHand, feld, isHuman;
     private String name;
     private Text[] texts = new Text[0];
     private Game g;
     private int[] position = {0,0};
-    public player(deck d1, Game g, int money, String name, int layer){
+    public Player(Deck d1, Game g, int money, String name, int layer){
         super(d1);
         this.money=money;
         bet=0;
@@ -15,7 +15,7 @@ public class player extends simpleCardGroup{
         isHuman=true;
         this.g=g;
     }
-    public player(deck d1, Game g, int money, String name, int layer, boolean isHuman){
+    public Player(Deck d1, Game g, int money, String name, int layer, boolean isHuman){
         super(d1);
         this.money=money;
         bet=0;
@@ -63,7 +63,7 @@ public class player extends simpleCardGroup{
     }
     public void setHandVisibility(boolean visibleHand){
         this.visibleHand=visibleHand;
-        for(card temp : this.getCards()){
+        for(Card temp : this.getCards()){
             temp.setOnFront(visibleHand);
         }
     }
@@ -151,32 +151,32 @@ public class player extends simpleCardGroup{
         g.addSprites(sprites);
     }
     public void setCards(){
-        card[] cards = this.getCards();
+        Card[] cards = this.getCards();
         for(int i=0;i<cards.length;i++){
             cards[i].setXPos(position[0]+(i*82)+100);
             cards[i].setYPos(position[1]);
         }
         if(isHuman)
-            for(card c : cards)
+            for(Card c : cards)
                 c.setOnFront(true);
     }
     public void setCardsVisible(){
-        card[] cards = this.getCards();
+        Card[] cards = this.getCards();
         for(int i=0;i<cards.length;i++){
             cards[i].setXPos(position[0]+(i*82)+100);
             cards[i].setYPos(position[1]);
         }
-        for(card c : cards)
+        for(Card c : cards)
             c.setOnFront(true);
     }
 
     public void setCardsInvisible(){
-        card[] cards = this.getCards();
+        Card[] cards = this.getCards();
         for(int i=0;i<cards.length;i++){
             cards[i].setXPos(position[0]+(i*82)+100);
             cards[i].setYPos(position[1]);
         }
-        for(card c : cards)
+        for(Card c : cards)
             c.setOnFront(false);
     }
 
