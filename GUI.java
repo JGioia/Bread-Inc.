@@ -3,42 +3,24 @@ import java.awt.event.*;
 import javax.swing.*;               // Needed for windows and frames
 import java.util.*;
 
-// This is actually the main class which runs the game
-public class GraphicalInterface extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
+public class GUI extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
 
     //This is the ArrayList of sprites this class paints
-    public static ArrayList<Sprite> images;
+    private ArrayList<Sprite> images;
 
     //
-    public int xOffset, yOffset, mouseX, mouseY;
+    public int xOffset=0, yOffset=0, nextId=0, mouseX, mouseY;
     private boolean upKey, downKey, rightKey, leftKey, mouseKey, escapeKey; 
     public static boolean[] boolInput = new boolean[6];
     public static int[] intInput = new int[2];
     private static double fps;
-
-    private static Game game;
-    
-    // Main method runs automatically
-    public static void main( String[] args ) {
-        GraphicalInterface graphicalInterface = new GraphicalInterface(); // Instantiate a game object which will store all our data
-        game = new Game();
-        long time = System.currentTimeMillis();
-        while( true ) { // Endless game loop
-            try { Thread.sleep(1000/60); } catch (InterruptedException e) {} // Set framerate to 60 frames per second
-            
-            //FPS checker
-            fps=1000/(System.currentTimeMillis()-(double)time);
-            time=System.currentTimeMillis();
-            
-            images=game.tick(boolInput, intInput);
-            graphicalInterface.heartbeat(); // Execute the game's heartbeat
-        }
-    }
     
     // Game contructor to initialize all our data
-    public GraphicalInterface() {
+    public GUI() {
         super("Game"); // Call the super constructor and set the window's title to "Game"
         
+        images = new ArrayList<Sprite>();
+
         //Set properties of the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -93,18 +75,15 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         Graphics frameGraphics = frame.getGraphics();
 
         //this iterates through all of our sprites and draws them
-        try{
-            for(int i=0;i<GraphicalInterface.images.size();i++){
-                if(images.get(i).visibility)
-                    frameGraphics.drawImage(
-                        images.get(i).getImage(), 
-                        images.get(i).getXPos()-game.getXOffset(), 
-                        images.get(i).getYPos()-game.getYOffset(),
-                        images.get(i).getXSize(),
-                        images.get(i).getYSize(), null);
-            }
-        }catch(Exception nulLPointerException){}
-        
+        for(int i=0;i<images.size();i++){
+            if(images.get(i).visibility)
+                frameGraphics.drawImage(
+                    images.get(i).getImage(), 
+                    images.get(i).getXPos()-xOffset, 
+                    images.get(i).getYPos()-yOffset,
+                    images.get(i).getXSize(),
+                    images.get(i).getYSize(), null);
+        }
         
         /*Debug Graphics
             frameGraphics.setColor( Color.BLUE );
@@ -123,7 +102,48 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
         //this draws the image we just made to the screen
         page.drawImage(frame,0,0,null);
     }
+
+
+    //Imported from Game.java
+    public void tick(){
+        for(int i=0;i<images.size();i++){
+                images.get(i).tick(boolInput,intInput);
+        }
+    }
+
+    public void addSprite(Sprite s){
+        boolean added=false;
+        for(int i=0;i<images.size();i++){
+            if(s.getLayer()<images.get(i).getLayer()){
+                images.add(i,s);
+                s.setId(nextId);
+                nextId++;
+                added=true;
+                break;
+            }
+        }
+        if(!added){
+            images.add(s);
+            s.setId(nextId);
+            nextId++;
+            added=true;
+        }
+    }
     
+    public void addSprites(Sprite[] sprites){
+        for(Sprite sprite : sprites){
+            addSprite(sprite);       
+        }     
+    }
+
+    public boolean hitsBox(int[][] hitbox){
+        for(int i=0;i<images.size();i++){
+            if(images.get(i).hitsBox(hitbox))
+                return true;
+        }
+        return false;
+    }
+
     // We implement a KeyListener so we need the KeyListener methods
     public void keyPressed(KeyEvent e) {
         if( e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP ) {
@@ -177,14 +197,14 @@ public class GraphicalInterface extends JFrame implements KeyListener, MouseList
 
     public void mouseDragged(MouseEvent e){
         try{
-            mouseX=e.getX()+game.getXOffset();
-            mouseY=e.getY()+game.getYOffset();
+            mouseX=e.getX()+xOffset;
+            mouseY=e.getY()+yOffset;
         }catch(NullPointerException i){}
     }
     public void mouseMoved(MouseEvent e){
         try{
-            mouseX=e.getX()+game.getXOffset();
-            mouseY=e.getY()+game.getYOffset();
+            mouseX=e.getX()+xOffset;
+            mouseY=e.getY()+yOffset;
         }catch(NullPointerException i){}
     }
 }

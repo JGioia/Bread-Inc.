@@ -1,4 +1,4 @@
-public class SimpleCardGroup{
+public abstract class SimpleCardGroup{
     private Card [] cards = new Card[0];
     private Deck d1;
     public SimpleCardGroup(Deck d1){
